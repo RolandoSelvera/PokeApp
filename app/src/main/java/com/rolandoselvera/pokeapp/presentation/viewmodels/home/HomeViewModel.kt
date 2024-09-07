@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rolandoselvera.pokeapp.data.model.Pokemon
 import com.rolandoselvera.pokeapp.data.model.PokemonResponse
+import com.rolandoselvera.pokeapp.domain.GetPokemonByNameUseCase
 import com.rolandoselvera.pokeapp.domain.GetPokemonListUseCase
-import com.rolandoselvera.pokeapp.domain.GetPokemonUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getPokemonListUseCase: GetPokemonListUseCase,
-    private val getPokemonUseCase: GetPokemonUseCase,
+    private val getPokemonByNameUseCase: GetPokemonByNameUseCase,
 ) : ViewModel() {
 
     private val _pokemonList = MutableLiveData<Result<PokemonResponse>>()
@@ -38,10 +38,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun fetchSinglePokemon(id: Int) {
+    fun fetchSinglePokemon(name: String) {
         viewModelScope.launch {
             try {
-                val result = getPokemonUseCase(id)
+                val result = getPokemonByNameUseCase(name)
                 _pokemon.postValue(result)
             } catch (e: Exception) {
                 _error.postValue(e.message)

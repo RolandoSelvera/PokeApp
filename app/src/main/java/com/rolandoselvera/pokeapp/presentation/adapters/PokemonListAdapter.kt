@@ -45,7 +45,7 @@ class PokemonListAdapter(context: Context, private val onItemClicked: (PokemonRe
 
                 image.load(result.imageUrl) {
                     crossfade(true)
-                    placeholder(R.drawable.ic_img_preview)
+                    placeholder(R.drawable.pokemon_icon)
                 }
             }
         }
