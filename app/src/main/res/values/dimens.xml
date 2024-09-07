@@ -19,4 +19,5 @@
     <dimen name="dimen_100">100dp</dimen>
     <dimen name="dimen_150">150dp</dimen>
     <dimen name="dimen_190">190dp</dimen>
+    <dimen name="dimen_250">250dp</dimen>
 </resources>

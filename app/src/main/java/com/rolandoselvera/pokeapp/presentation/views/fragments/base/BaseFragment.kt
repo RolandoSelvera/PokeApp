@@ -4,11 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -64,11 +66,29 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         inputMethodManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
     }
 
+    fun initToolbar() {
+        val toolbar = (activity as AppCompatActivity?)?.supportActionBar
+        toolbar?.show()
+        toolbar?.setDisplayHomeAsUpEnabled(false)
+        toolbar?.setHomeAsUpIndicator(null)
+    }
+
     fun setupToolbar() {
         setHasOptionsMenu(true)
         val toolbar = (activity as AppCompatActivity?)?.supportActionBar
         toolbar?.show()
         toolbar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                findNavController().navigateUp()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     fun hideToolbar() {
