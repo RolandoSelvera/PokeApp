@@ -14,6 +14,7 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.rolandoselvera.pokeapp.R
+import com.rolandoselvera.pokeapp.presentation.views.activities.main.MainActivity
 
 /**
  * A simple [Fragment] subclass.
@@ -110,7 +111,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         }
     }
 
-    fun showAlert(title: String?, message: String?, onAccept: () -> Unit, onCancel: ()-> Unit) {
+    fun showAlert(title: String?, message: String?, onAccept: () -> Unit, onCancel: () -> Unit) {
         if (::dialog.isInitialized) {
             dialog
                 .setTitle(title)
@@ -127,5 +128,17 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                 }
                 .show()
         }
+    }
+
+    fun showProgress() {
+        (activity as MainActivity).showProgress()
+    }
+
+    fun hideProgress() {
+        (activity as MainActivity).hideProgress()
+    }
+
+    fun finishApp() {
+        requireActivity().finish()
     }
 }

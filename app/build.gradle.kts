@@ -61,6 +61,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
+    // SwipeRefresh:
+    implementation(libs.androidx.swiperefreshlayout)
+
     // Preferences:
     implementation(libs.androidx.preference.ktx)
 

@@ -19,8 +19,10 @@ loggingInterceptor = "4.11.0"
 preferencesVersion = "1.2.1"
 roomVersion = "2.6.1"
 hiltVersion = "2.48"
+swiperefreshlayout = "1.2.0-alpha01"
 
 [libraries]
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
