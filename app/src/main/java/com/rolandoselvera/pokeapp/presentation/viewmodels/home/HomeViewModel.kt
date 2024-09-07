@@ -19,10 +19,10 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _pokemonList = MutableLiveData<Result<PokemonResponse>>()
-    val pokemonList: LiveData<Result<PokemonResponse>> = _pokemonList
+    val pokemonList: LiveData<Result<PokemonResponse>> get() = _pokemonList
 
     private val _pokemon = MutableLiveData<Result<Pokemon>>()
-    val pokemon: LiveData<Result<Pokemon>> = _pokemon
+    val pokemon: LiveData<Result<Pokemon>> get() = _pokemon
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error

@@ -18,5 +18,7 @@ data class PokemonResult(
     @SerializedName("name")
     val name: String,
     @SerializedName("url")
-    val url: String
+    val url: String,
+    var id: Int = 0,
+    var imageUrl: String? = null
 ) : Serializable
