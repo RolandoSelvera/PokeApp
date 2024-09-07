@@ -26,7 +26,7 @@ class PokemonRepositoryImpl @Inject constructor(
                                 }
                                 .last()
                                 .toInt()
-                            val pokemonDetailResponse = apiService.getPokemon(pokemonId)
+                            val pokemonDetailResponse = apiService.getPokemonById(pokemonId)
                             if (pokemonDetailResponse.isSuccessful) {
                                 pokemon.copy(
                                     id = pokemonId,
@@ -48,9 +48,24 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPokemon(id: Int): Result<Pokemon> {
+    override suspend fun getPokemonById(id: Int): Result<Pokemon> {
         return try {
-            val response = apiService.getPokemon(id)
+            val response = apiService.getPokemonById(id)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    Result.success(it)
+                } ?: Result.failure(Exception("Error: Response body is null"))
+            } else {
+                Result.failure(Exception("Error: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getPokemonByName(name: String): Result<Pokemon> {
+        return try {
+            val response = apiService.getPokemonByName(name)
             if (response.isSuccessful) {
                 response.body()?.let {
                     Result.success(it)

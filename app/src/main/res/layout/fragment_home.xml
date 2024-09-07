@@ -12,15 +12,62 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSearch"
+            style="@style/TextInputLayout.OutlinedBoxStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_8"
+            android:hint="@string/search"
+            android:textColorHint="@color/grayText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fieldSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableEnd="@drawable/ic_search"
+                android:drawablePadding="@dimen/dimen_8"
+                android:drawableTint="@color/black"
+                android:fontFamily="@font/questrial"
+                android:inputType="textAutoComplete|textCapWords"
+                android:singleLine="true"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/search"
+            android:layout_width="@dimen/dimen_24"
+            android:layout_height="@dimen/dimen_24"
+            android:layout_marginTop="@dimen/dimen_22"
+            android:layout_marginEnd="@dimen/dimen_16"
+            android:src="@drawable/ic_search"
+            app:layout_constraintEnd_toEndOf="@id/tilSearch"
+            app:layout_constraintTop_toTopOf="@+id/tilSearch"
+            app:tint="@color/black" />
+
+        <include
+            android:id="@+id/containerState"
+            layout="@layout/item_states"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilSearch" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/dimen_0"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/dimen_16"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilSearch"
             tools:itemCount="10"
             tools:listitem="@layout/item_list_pokemon" />
 
