@@ -5,6 +5,9 @@
 
     <color name="primaryColor">#FFCC01</color>
     <color name="secondaryColor">#FFCC01</color>
+    <color name="propertiesColor">#290087</color>
+    <color name="typesColor">#27B31D</color>
+    <color name="abilitiesColor">#68580A</color>
     <color name="errorColor">#B00020</color>
     <color name="grayText">#79747E</color>
     <color name="itemBg">#4FAFC6FF</color>

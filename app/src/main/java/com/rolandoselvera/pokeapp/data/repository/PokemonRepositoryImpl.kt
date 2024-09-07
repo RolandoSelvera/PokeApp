@@ -30,7 +30,7 @@ class PokemonRepositoryImpl @Inject constructor(
                             if (pokemonDetailResponse.isSuccessful) {
                                 pokemon.copy(
                                     id = pokemonId,
-                                    imageUrl = pokemonDetailResponse.body()?.sprites?.frontDefault
+                                    imageUrl = pokemonDetailResponse.body()?.sprites?.other?.officialArtwork?.frontDefault
                                 )
                             } else {
                                 pokemon

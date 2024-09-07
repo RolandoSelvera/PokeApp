@@ -8,15 +8,31 @@ data class Pokemon(
     val id: Int,
     @SerializedName("name")
     val name: String,
+    @SerializedName("abilities")
+    val abilities: List<Abilities>,
     @SerializedName("sprites")
     val sprites: Sprites,
     @SerializedName("stats")
     val stats: List<Stats>,
+    @SerializedName("types")
+    val types: List<Types>,
     @SerializedName("height")
     val height: Int,
     @SerializedName("weight")
     val weight: Int
 ) : Serializable
+
+data class Abilities(
+    @SerializedName("ability")
+    val ability: Ability
+)
+
+data class Ability(
+    @SerializedName("name")
+    val name: String,
+    @SerializedName("url")
+    val url: String
+)
 
 data class Sprites(
     @SerializedName("back_default")
@@ -26,7 +42,9 @@ data class Sprites(
     @SerializedName("front_default")
     val frontDefault: String,
     @SerializedName("front_shiny")
-    val frontShiny: String
+    val frontShiny: String,
+    @SerializedName("other")
+    val other: Other
 ) : Serializable
 
 data class Stats(
@@ -43,4 +61,29 @@ data class Stat(
     val name: String,
     @SerializedName("url")
     val url: String
+) : Serializable
+
+data class Types(
+    @SerializedName("slot")
+    val slot: Int,
+    @SerializedName("type")
+    val type: Type
+) : Serializable
+
+data class Type(
+    @SerializedName("name")
+    val name: String,
+    @SerializedName("url")
+    val url: String
+) : Serializable
+
+data class Other(
+    @SerializedName("dream_world")
+    val dreamWorld: Sprites,
+    @SerializedName("home")
+    val home: Sprites,
+    @SerializedName("showdown")
+    val showdown: Sprites,
+    @SerializedName("official-artwork")
+    val officialArtwork: Sprites
 ) : Serializable
