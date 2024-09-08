@@ -6,6 +6,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.rolandoselvera.pokeapp.R
 import com.rolandoselvera.pokeapp.common.internet.ConnectivityUtil
 import com.rolandoselvera.pokeapp.data.model.PokemonResult
@@ -25,7 +27,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var adapter: PokemonListAdapter
-    private var localPokemonList: List<PokemonResult>? = listOf()
+    private var localPokemonList: MutableList<PokemonResult> = mutableListOf()
+    private var pokemonByName: MutableList<PokemonResult> = mutableListOf()
 
     override fun getViewBinding() = FragmentHomeBinding.inflate(layoutInflater)
 
@@ -40,15 +43,50 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             showPokemonList()
 
             if (ConnectivityUtil(context).checkConnectivity()) {
-                localPokemonList = pokemonList.getOrNull()?.results
-                adapter.submitList(localPokemonList)
+                val newPokemonList = pokemonList?.getOrNull()?.results ?: emptyList()
 
-                if (localPokemonList.isNullOrEmpty()) {
+                if (newPokemonList.isNotEmpty()) {
+                    localPokemonList.addAll(newPokemonList)
+                    adapter.submitList(localPokemonList)
+                }
+
+                if (localPokemonList.isEmpty()) {
                     hidePokemonList()
                 }
+                setLoadingToFalse()
+            } else {
+                setLoadingToFalse()
+                hidePokemonList()
+                showAlert(getString(R.string.app_name), getString(R.string.no_internet)) {
+                    finishApp()
+                }
+            }
+        }
+
+        homeViewModel.pokemon.observe(viewLifecycleOwner) { pokemon ->
+            hideProgress()
+            showPokemonList()
+
+            if (ConnectivityUtil(context).checkConnectivity()) {
+                val singlePokemon = pokemon?.getOrNull()
+                val result = PokemonResult().copy(
+                    id = singlePokemon?.id ?: 0,
+                    name = singlePokemon?.name ?: "",
+                    imageUrl = pokemon.getOrNull()?.sprites?.other?.officialArtwork?.frontDefault
+                )
+
+                if (result.id != 0) {
+                    pokemonByName.addAll(listOf(result))
+                    adapter.submitList(pokemonByName)
+                }
+
+                if (pokemonByName.isEmpty()) {
+                    hidePokemonList()
+                }
+
                 binding.swipeRefresh.isRefreshing = false
             } else {
-                binding.swipeRefresh.isRefreshing = false
+                setLoadingToFalse()
                 hidePokemonList()
                 showAlert(getString(R.string.app_name), getString(R.string.no_internet)) {
                     finishApp()
@@ -58,7 +96,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         homeViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             hideProgress()
-            binding.swipeRefresh.isRefreshing = false
+            setLoadingToFalse()
             showAlert(getString(R.string.app_name), errorMessage) {
                 hidePokemonList()
             }
@@ -68,21 +106,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onResume() {
         super.onResume()
         binding.fieldSearch.text = null
-        binding.swipeRefresh.setOnRefreshListener {
-            fetchAllPokemons()
-            binding.swipeRefresh.isRefreshing = true
-            hideKeyboard()
-            showProgress()
-        }
-        fetchAllPokemons()
-        setupSearch()
         setupAdapter()
+        clearPokemonLists()
+        fetchAllPokemons()
+        setupSwipeRefresh()
+        setupSearch()
+        setupButton()
+    }
+
+    private fun setupButton() {
+        binding.apply {
+            fabShrink(recyclerView, fabTop)
+            fabTop.setOnClickListener {
+                recyclerView.smoothScrollToPosition(0)
+            }
+        }
     }
 
     private fun fetchAllPokemons() {
         showProgress()
         hidePokemonList()
-        homeViewModel.fetchAllPokemons(limit = 20, offset = 0)
+        homeViewModel.fetchAllPokemons()
+    }
+
+    private fun fetchSinglePokemon(name: String) {
+        homeViewModel.fetchSinglePokemon(name)
     }
 
     private fun setupAdapter() {
@@ -94,20 +142,58 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
         binding.recyclerView.adapter = adapter
+        setupInfiniteScroll()
+    }
+
+    private fun setupInfiniteScroll() {
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!homeViewModel.isSearching && !homeViewModel.isLoading &&
+                    firstVisibleItemPosition + visibleItemCount >= totalItemCount
+                ) {
+                    fetchAllPokemons()
+                }
+            }
+        })
+    }
+
+    private fun setupSwipeRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            homeViewModel.resetPagination()
+            localPokemonList.clear()
+            fetchAllPokemons()
+            binding.swipeRefresh.isRefreshing = true
+            hideKeyboard()
+            showProgress()
+        }
     }
 
     private fun setupSearch() {
         binding.apply {
             search.setOnClickListener {
-                val userSearch = fieldSearch.text.toString()
+                val userSearch = fieldSearch.text.toString().trim().lowercase()
 
-                if (userSearch.trim().isNotBlank()) {
-                    searchPokemonLocally(userSearch.lowercase())
+                if (userSearch.isNotBlank()) {
+                    homeViewModel.isSearching = true
+                    if (localPokemonList.any { it.name.lowercase() == userSearch }) {
+                        searchPokemonLocally(userSearch)
+                    } else {
+                        fetchSinglePokemon(userSearch)
+                    }
                     tilSearch.isErrorEnabled = false
                     tilSearch.error = null
                 } else {
+                    homeViewModel.isSearching = false
                     tilSearch.isErrorEnabled = true
                     tilSearch.error = getString(R.string.empty_field)
+                    adapter.submitList(localPokemonList)
+                    showPokemonList()
                 }
 
                 hideKeyboard()
@@ -130,11 +216,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     before: Int,
                     count: Int
                 ) {
-                    if (searchText.length > 2) {
-                        searchPokemonLocally(searchText.toString().lowercase())
+                    val searchQuery = searchText.toString().trim().lowercase()
+
+                    if (searchQuery.length > 2) {
+                        homeViewModel.isSearching = true
+                        if (localPokemonList.any { it.name.lowercase().contains(searchQuery) }) {
+                            searchPokemonLocally(searchQuery)
+                        } else {
+                            fetchSinglePokemon(searchQuery)
+                        }
                         tilSearch.isErrorEnabled = false
                         tilSearch.error = null
-                    } else if (searchText.isEmpty()) {
+                    } else if (searchQuery.isEmpty()) {
+                        homeViewModel.isSearching = false
                         hideKeyboard()
                         adapter.submitList(localPokemonList)
                         showPokemonList()
@@ -145,16 +239,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun searchPokemonLocally(query: String) {
-        val filteredList = localPokemonList?.filter { pokemon ->
+        val filteredList = localPokemonList.filter { pokemon ->
             pokemon.name.lowercase().contains(query)
         }
 
-        if (!filteredList.isNullOrEmpty() && filteredList.isNotEmpty()) {
+        if (filteredList.isNotEmpty()) {
             adapter.submitList(filteredList)
             showPokemonList()
         } else {
             hidePokemonList()
         }
+    }
+
+    private fun clearPokemonLists() {
+        localPokemonList = mutableListOf()
+        pokemonByName = mutableListOf()
+        adapter.submitList(emptyList())
+        homeViewModel.resetPagination()
+    }
+
+    private fun setLoadingToFalse() {
+        binding.swipeRefresh.isRefreshing = false
+        homeViewModel.isLoading = false
+        homeViewModel.isSearching = false
     }
 
     private fun showPokemonList() {

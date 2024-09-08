@@ -8,8 +8,11 @@
     <string name="no_internet">There is no internet connection, try again later.</string>
     <string name="search">Search a Pokemon</string>
     <string name="empty_field">Empty field</string>
+    <string name="scroll_to_top">Scroll to top</string>
     <string name="pokemon_not_found">Pokemon not found :(</string>
     <string name="pokemon_subtitle_properties">Properties</string>
+    <string name="pokemon_subtitle_type">Type</string>
+    <string name="pokemon_subtitle_abilities">Abilities</string>
     <string name="pokemon_subtitle_sprites">Sprites</string>
     <string name="pokemon_height">Height: %s cm</string>
     <string name="pokemon_weight">Weight: %s kg</string>
