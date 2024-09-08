@@ -1,6 +1,6 @@
 # PokeApp
 
-[![Kotlin](https://img.shields.io/badge/kotlin-1.9.22-blueviolet?logo=kotlin&label=kotlin)](http://kotlinlang.org) [![Gradle](https://img.shields.io/badge/gradle-8.2-02303a?logo=gradle&logoColor=1bacca&label=gradle)](https://developer.android.com/studio/releases/gradle-plugin)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.9.0-blueviolet?logo=kotlin&label=kotlin)](http://kotlinlang.org) [![Gradle](https://img.shields.io/badge/gradle-8.7-02303a?logo=gradle&logoColor=1bacca&label=gradle)](https://developer.android.com/studio/releases/gradle-plugin)
 
 ### Descripción
 
