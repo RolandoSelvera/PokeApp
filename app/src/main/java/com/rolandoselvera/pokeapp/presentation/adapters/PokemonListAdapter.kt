@@ -32,6 +32,11 @@ class PokemonListAdapter(context: Context, private val onItemClicked: (PokemonRe
         holder.bind(current)
     }
 
+    fun updateList(newList: List<PokemonResult>) {
+        submitList(newList)
+        notifyDataSetChanged()
+    }
+
     inner class SearchViewHolder(private var binding: ItemListPokemonBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
