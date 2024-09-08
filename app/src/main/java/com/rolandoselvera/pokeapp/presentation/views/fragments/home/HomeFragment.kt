@@ -47,7 +47,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
                 if (newPokemonList.isNotEmpty()) {
                     localPokemonList.addAll(newPokemonList)
-                    adapter.submitList(localPokemonList)
+                    adapter.updateList(localPokemonList)
                 }
 
                 if (localPokemonList.isEmpty()) {
@@ -75,9 +75,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     imageUrl = pokemon.getOrNull()?.sprites?.other?.officialArtwork?.frontDefault
                 )
 
-                if (result.id != 0) {
-                    pokemonByName.addAll(listOf(result))
-                    adapter.submitList(pokemonByName)
+                if (result.id != 0 && pokemonByName.none { it.id == result.id }) {
+                    pokemonByName.add(result)
+                    adapter.updateList(pokemonByName)
+                } else {
+                    adapter.updateList(pokemonByName)
                 }
 
                 if (pokemonByName.isEmpty()) {
@@ -125,7 +127,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private fun fetchAllPokemons() {
         showProgress()
-        hidePokemonList()
         homeViewModel.fetchAllPokemons()
     }
 
@@ -192,7 +193,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     homeViewModel.isSearching = false
                     tilSearch.isErrorEnabled = true
                     tilSearch.error = getString(R.string.empty_field)
-                    adapter.submitList(localPokemonList)
+                    adapter.updateList(localPokemonList)
                     showPokemonList()
                 }
 
@@ -208,6 +209,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     count: Int,
                     after: Int
                 ) {
+                    pokemonByName = mutableListOf()
                 }
 
                 override fun onTextChanged(
@@ -230,7 +232,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     } else if (searchQuery.isEmpty()) {
                         homeViewModel.isSearching = false
                         hideKeyboard()
-                        adapter.submitList(localPokemonList)
+                        adapter.updateList(localPokemonList)
                         showPokemonList()
                     }
                 }
@@ -244,7 +246,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
         if (filteredList.isNotEmpty()) {
-            adapter.submitList(filteredList)
+            adapter.updateList(filteredList)
             showPokemonList()
         } else {
             hidePokemonList()
@@ -254,7 +256,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private fun clearPokemonLists() {
         localPokemonList = mutableListOf()
         pokemonByName = mutableListOf()
-        adapter.submitList(emptyList())
+        adapter.updateList(emptyList())
         homeViewModel.resetPagination()
     }
 
