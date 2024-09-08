@@ -24,7 +24,9 @@ Librerías externas:
 
 ### Capturas de pantalla
 
-N/A
+<img src="/docs/img1.png" height="480"> <img src="/docs/img2.png" height="480"> <img src="/docs/img3.png" height="480">
+
+<img src="/docs/img4.png" height="480"> <img src="/docs/img5.png" height="480"> <img src="/docs/img6.png" height="480">
 
 ### Video Demo
 
