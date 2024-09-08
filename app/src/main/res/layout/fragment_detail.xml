@@ -32,19 +32,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/iconPokeball"
+            android:layout_width="@dimen/dimen_32"
+            android:layout_height="@dimen/dimen_32"
+            android:layout_marginTop="@dimen/dimen_16"
+            android:rotation="45"
+            android:src="@drawable/pokemon_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgPokemon" />
+
         <TextView
             android:id="@+id/txtName"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_16"
+            android:layout_marginStart="@dimen/dimen_8"
             android:ellipsize="end"
             android:fontFamily="@font/questrial"
             android:lines="1"
             android:textColor="@color/black"
             android:textSize="@dimen/text_25"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/iconPokeball"
+            app:layout_constraintStart_toEndOf="@id/iconPokeball"
             app:layout_constraintTop_toBottomOf="@id/imgPokemon"
+            app:layout_constraintTop_toTopOf="@id/iconPokeball"
             tools:text="Pokemon Name" />
 
         <TextView
@@ -59,14 +70,14 @@
             android:textSize="@dimen/text_18"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtName"
+            app:layout_constraintTop_toBottomOf="@id/iconPokeball"
             tools:text="Id" />
 
         <TextView
             android:id="@+id/txtProperties"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8"
+            android:layout_marginTop="@dimen/dimen_16"
             android:fontFamily="@font/questrial"
             android:lines="1"
             android:text="@string/pokemon_subtitle_properties"
@@ -84,13 +95,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtProperties" />
 
+        <TextView
+            android:id="@+id/txtType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8"
+            android:fontFamily="@font/questrial"
+            android:lines="1"
+            android:text="@string/pokemon_subtitle_type"
+            android:textColor="@color/grayText"
+            android:textSize="@dimen/text_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chipGroup1" />
+
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chipGroup1" />
+            app:layout_constraintTop_toBottomOf="@id/txtType" />
+
+        <TextView
+            android:id="@+id/txtAbilities"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8"
+            android:fontFamily="@font/questrial"
+            android:lines="1"
+            android:text="@string/pokemon_subtitle_abilities"
+            android:textColor="@color/grayText"
+            android:textSize="@dimen/text_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chipGroup2" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup3"
@@ -98,7 +137,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chipGroup2" />
+            app:layout_constraintTop_toBottomOf="@id/txtAbilities" />
 
         <TextView
             android:id="@+id/txtSprites"

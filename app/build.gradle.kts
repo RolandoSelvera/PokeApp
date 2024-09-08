@@ -86,4 +86,7 @@ dependencies {
 
     // Gson:
     implementation(libs.gson)
+
+    // Lottie:
+    implementation(libs.lottie)
 }

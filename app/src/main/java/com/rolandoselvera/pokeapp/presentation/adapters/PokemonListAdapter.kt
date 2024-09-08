@@ -54,14 +54,14 @@ class PokemonListAdapter(context: Context, private val onItemClicked: (PokemonRe
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<PokemonResult>() {
             override fun areItemsTheSame(oldItem: PokemonResult, newItem: PokemonResult): Boolean {
-                return oldItem === newItem
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
                 oldItem: PokemonResult,
                 newItem: PokemonResult
             ): Boolean {
-                return oldItem.name == newItem.name
+                return oldItem == newItem
             }
         }
     }
